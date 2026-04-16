@@ -8,8 +8,8 @@ docker compose up --build
 
 What starts:
 
-- Frontend: [http://localhost:3000](http://localhost:3000)
-- API: [http://localhost:5000](http://localhost:5000)
+- Frontend: [http://localhost:5000](http://localhost:5000)
+- API: [http://localhost:5001](http://localhost:5001)
 - MongoDB and Redis inside the compose network
 - Seed data on first startup
 
