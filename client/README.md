@@ -30,16 +30,21 @@ This folder contains a TypeScript React implementation of the QuizFlow UI, conve
 
 ## Setup
 
-1. Install dependencies:
+1. Run the full app with Docker from the repo root:
+   - `docker compose up --build`
+2. For local development, install dependencies:
    - `npm install`
-2. Configure environment:
+3. Configure environment:
    - copy `.env.example` to `.env`
    - set `VITE_API_BASE_URL` if your backend URL is different
-3. Run dev server:
+
+## Local Development
+
+1. Run dev server:
    - `npm run dev`
-4. Build for production:
+2. Build for production:
    - `npm run build`
-5. Preview build:
+3. Preview build:
    - `npm run preview`
 
 ## Notes
