@@ -7,10 +7,7 @@ interface JwtPayload {
 }
 
 const JWT_SECRET = process.env.JWT_SECRET || "change_me";
-const JWT_REFRESH_SECRET =
-  process.env.JWT_REFRESH_SECRET || "change_me_refresh";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1d";
-const JWT_REFRESH_EXPIRES_IN = process.env.JWT_REFRESH_EXPIRES_IN || "7d";
 
 export const signToken = (payload: JwtPayload): string => {
   return jwt.sign(payload, JWT_SECRET, {
@@ -20,10 +17,6 @@ export const signToken = (payload: JwtPayload): string => {
 
 export const verifyToken = (token: string): JwtPayload => {
   return jwt.verify(token, JWT_SECRET) as JwtPayload;
-};
-
-export const verifyRefreshToken = (token: string): JwtPayload => {
-  return jwt.verify(token, JWT_REFRESH_SECRET) as JwtPayload;
 };
 
 export const decodeTokenExpiration = (token: string): number | null => {
