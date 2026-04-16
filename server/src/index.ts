@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import connectDB from "./config/db";
 import { connectRedis } from "./config/redis";
 import authRoutes from "./routes/auth.routes";
+import questionRoutes from "./routes/question.routes";
 
 const app: Application = express();
 dotenv.config();
@@ -16,6 +17,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/api/auth", authRoutes);
+app.use("/api/questions", questionRoutes);
 
 app.get("/", (req: Request, res: Response) => {
   res.send("QuizFlow API is running");
