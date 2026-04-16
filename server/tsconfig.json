@@ -1,0 +1,31 @@
+{
+  "compilerOptions": {
+    /* Target & Module */
+    "target": "ES2020",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+
+    /* Directories */
+    "rootDir": "./src",
+    "outDir": "./dist",
+
+    /* Strictness & Safety */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+
+    /* Interop & Modern Features */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "emitDecoratorMetadata": true, // Useful if you use TypeORM later
+    "experimentalDecorators": true, // Match your NestJS-style preferences
+
+    /* Remove Comments & Clean Output */
+    "removeComments": true,
+    "sourceMap": true // Helps with debugging in VS Code
+  },
+  "include": ["src/**/*"],
+  "exclude": ["node_modules", "**/*.spec.ts"]
+}
