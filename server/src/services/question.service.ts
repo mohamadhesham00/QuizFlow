@@ -13,11 +13,17 @@ import {
   type QuestionListQuery,
   resolveQuestionSort,
 } from "../utils/filters/question.filter";
+import { toQuestionDto } from "../dtos/question.dto";
 
 type QuestionOptionInput = {
   text: string;
   isCorrect: boolean;
 };
+
+const QUESTION_RELATIONS = {
+  path: "createdBy",
+  select: "fullName email role",
+} as const;
 
 export const createQuestionEntry = async (input: {
   text: string;
@@ -40,7 +46,11 @@ export const createQuestionEntry = async (input: {
     createdBy: input.userId,
   });
 
-  return question;
+  const hydrated = await Question.findById(question._id).populate(
+    QUESTION_RELATIONS,
+  );
+
+  return toQuestionDto((hydrated || question).toObject());
 };
 
 export const getAllQuestions = async (query: QuestionListQuery) => {
@@ -53,6 +63,7 @@ export const getAllQuestions = async (query: QuestionListQuery) => {
 
   const [items, total] = await Promise.all([
     Question.find(filter)
+      .populate(QUESTION_RELATIONS)
       .sort({ [sortBy]: sortOrder })
       .skip(skip)
       .limit(limit),
@@ -60,7 +71,7 @@ export const getAllQuestions = async (query: QuestionListQuery) => {
   ]);
 
   return {
-    items,
+    items: items.map((item) => toQuestionDto(item.toObject())),
     pagination: {
       page,
       limit,
@@ -71,14 +82,14 @@ export const getAllQuestions = async (query: QuestionListQuery) => {
 };
 
 export const getQuestionEntryById = async (id: string) => {
-  const question = await Question.findById(id);
+  const question = await Question.findById(id).populate(QUESTION_RELATIONS);
   if (!question) {
     const error = new Error("Question not found");
     (error as Error & { statusCode?: number }).statusCode = 404;
     throw error;
   }
 
-  return question;
+  return toQuestionDto(question.toObject());
 };
 
 export const updateQuestionEntry = async (
@@ -96,7 +107,7 @@ export const updateQuestionEntry = async (
   const question = await Question.findByIdAndUpdate(id, normalizedPayload, {
     returnDocument: "after",
     runValidators: true,
-  });
+  }).populate(QUESTION_RELATIONS);
 
   if (!question) {
     const error = new Error("Question not found");
@@ -104,7 +115,7 @@ export const updateQuestionEntry = async (
     throw error;
   }
 
-  return question;
+  return toQuestionDto(question.toObject());
 };
 
 export const deleteQuestionEntry = async (id: string) => {
@@ -135,14 +146,14 @@ export const attachQuestionImage = async (id: string, imageUrl: string) => {
     id,
     { imageUrl },
     { returnDocument: "after" },
-  );
+  ).populate(QUESTION_RELATIONS);
   if (!question) {
     const error = new Error("Question not found");
     (error as Error & { statusCode?: number }).statusCode = 404;
     throw error;
   }
 
-  return question;
+  return toQuestionDto(question.toObject());
 };
 
 export const deleteQuestionImage = async (id: string) => {
@@ -161,12 +172,12 @@ export const deleteQuestionImage = async (id: string) => {
     id,
     { imageUrl: "" },
     { returnDocument: "after" },
-  );
+  ).populate(QUESTION_RELATIONS);
   if (!question) {
     const error = new Error("Question not found");
     (error as Error & { statusCode?: number }).statusCode = 404;
     throw error;
   }
 
-  return question;
+  return toQuestionDto(question.toObject());
 };

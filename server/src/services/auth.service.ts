@@ -1,5 +1,6 @@
 import User from "../models/User";
 import { signToken } from "../utils/jwt";
+import { toUserDto } from "../dtos/user.dto";
 
 export const loginUser = async (input: { email: string; password: string }) => {
   const user = await User.findOne({ email: input.email }).select("+password");
@@ -23,11 +24,6 @@ export const loginUser = async (input: { email: string; password: string }) => {
 
   return {
     token,
-    user: {
-      id: user._id,
-      fullName: user.fullName,
-      email: user.email,
-      role: user.role,
-    },
+    user: toUserDto(user),
   };
 };
